@@ -48,7 +48,8 @@ function runDemoStep(index){demoIndex=(index+demoSteps.length)%demoSteps.length;
 function startDemo(){clearInterval(demoTimer);playing=true;$('#toggleDemo').textContent='暂停';demoTimer=setInterval(()=>runDemoStep(demoIndex+1),5200);}
 function toggleDemo(){if(playing){clearInterval(demoTimer);playing=false;$('#toggleDemo').textContent='继续';}else startDemo();}
 
-renderCategories();selectResource(0);runDemoStep(0);startDemo();
+const urlParams=new URLSearchParams(location.search);const initialStep=Math.max(0,Math.min(demoSteps.length-1,Number(urlParams.get('step')||0)));
+renderCategories();selectResource(0);runDemoStep(initialStep);if(urlParams.get('autoplay')!=='0')startDemo();else{playing=false;$('#toggleDemo').textContent='继续';}
 $$('[data-resource]').forEach(el=>el.addEventListener('click',()=>{selectResource(+el.dataset.resource);showToast(`已定位：${resources[+el.dataset.resource].name}`);}));
 $$('.detail-tabs button').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
 $$('[data-collapse]').forEach(b=>b.addEventListener('click',()=>$('.workspace').classList.add(`${b.dataset.collapse}-collapsed`)));
