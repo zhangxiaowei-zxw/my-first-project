@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="石景山区五环以东闲置空间资源动态管理平台演示版" />
+  <title>闲置空间资源动态管理平台｜演示版</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div>
+          <h1>闲置空间资源动态管理平台</h1>
+          <p>石景山区五环以东 · 街区控规工作台</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <div class="sync-status"><span></span> 数据更新于 2026-11-05 09:30</div>
+        <button class="ghost-button" id="layerButton">图层管理</button>
+        <button class="avatar-button" aria-label="用户菜单">管</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="sidebar sidebar-left" id="leftSidebar">
+        <div class="sidebar-heading">
+          <div><strong>资源总览</strong><span>示例数据</span></div>
+          <button class="icon-button" data-collapse="left" aria-label="收起左侧栏">‹</button>
+        </div>
+        <div class="search-box"><span>⌕</span><input id="searchInput" placeholder="搜索名称、编号或地址" /></div>
+        <div class="metric-row">
+          <div><strong id="resourceCount">128</strong><span>资源总数</span></div>
+          <div><strong>36.8</strong><span>空间面积/万㎡</span></div>
+          <div><strong>19</strong><span>待核实</span></div>
+        </div>
+        <section class="filter-section">
+          <div class="section-title"><span>资源分类</span><button id="resetFilter">重置</button></div>
+          <div class="category-list" id="categoryList"></div>
+        </section>
+        <section class="filter-section compact-filter">
+          <div class="section-title"><span>利用状态</span></div>
+          <div class="chip-group">
+            <button class="chip active">全部</button><button class="chip">完全闲置</button>
+            <button class="chip">部分闲置</button><button class="chip">低效利用</button>
+          </div>
+        </section>
+        <section class="filter-section compact-filter">
+          <div class="section-title"><span>核实状态</span></div>
+          <label class="check-row"><input type="checkbox" checked /> 已核实 <span>87</span></label>
+          <label class="check-row"><input type="checkbox" checked /> 待核实 <span>19</span></label>
+          <label class="check-row"><input type="checkbox" checked /> 核实中 <span>22</span></label>
+        </section>
+      </aside>
+
+      <section class="map-stage" id="mapStage">
+        <div class="map-toolbar">
+          <div class="basemap-switch"><button class="active">街道</button><button>卫星</button></div>
+          <div class="tool-cluster"><button title="框选">▱</button><button title="测距">⌁</button><button title="定位">◎</button></div>
+        </div>
+        <div class="map-canvas" id="mapCanvas" role="img" aria-label="石景山区五环以东资源分布演示地图">
+          <svg class="map-art" viewBox="0 0 1000 700" preserveAspectRatio="none" aria-hidden="true">
+            <rect width="1000" height="700" fill="#eef1ed"/>
+            <path class="water" d="M0 570 C170 520 220 630 400 588 C560 548 740 620 1000 560 L1000 700 L0 700 Z"/>
+            <g class="blocks">
+              <path d="M40 35h170l20 110-90 68-110-28z"/><path d="M260 30h210l-8 138-195 20z"/>
+              <path d="M500 28h180l72 102-95 83-145-35z"/><path d="M762 35h200l-15 170-165-9-48-74z"/>
+              <path d="M65 240l145-18 74 97-49 116-182-19z"/><path d="M310 220h164l34 176-190 26-48-107z"/>
+              <path d="M540 240l160-35 89 125-65 121-176-39z"/><path d="M820 230l142 18-10 184-157 15-43-111z"/>
+              <path d="M92 468l174-25 46 103-65 86-183-30z"/><path d="M340 450l176-15 18 138-195 47-30-95z"/>
+              <path d="M575 470l185-12 48 116-138 72-122-68z"/><path d="M825 470l140-14-4 100-102 69-53-67z"/>
+            </g>
+            <g class="roads major">
+              <path d="M-20 205 C190 170 355 202 520 228 S820 267 1020 196"/>
+              <path d="M222 -20 C210 165 262 282 286 395 S277 585 310 720"/>
+              <path d="M718 -20 C675 147 735 268 738 392 S700 580 734 720"/>
+            </g>
+            <g class="roads minor">
+              <path d="M0 420 C220 390 342 450 520 420 S775 374 1000 412"/>
+              <path d="M475 0 C485 160 480 300 512 700"/>
+              <path d="M0 88 C230 110 348 78 530 96 S790 122 1000 85"/>
+            </g>
+            <g class="labels">
+              <text x="70" y="115">苹果园街道</text><text x="334" y="115">古城街道</text>
+              <text x="575" y="120">八角街道</text><text x="805" y="118">鲁谷街道</text>
+              <text x="390" y="350" class="district-label">石景山区五环以东</text>
+              <text x="450" y="610" class="water-label">永定河引水渠</text>
+            </g>
+            <g class="planning-layer" id="planningLayer">
+              <path d="M325 255 L455 244 L482 360 L350 384 Z"/><path d="M590 270 L700 245 L752 335 L690 410 L575 370 Z"/>
+            </g>
+          </svg>
+          <div class="map-marker marker-1" data-resource="0"><span>1</span></div>
+          <div class="map-marker marker-2" data-resource="1"><span>3</span></div>
+          <div class="map-marker marker-3" data-resource="2"><span>1</span></div>
+          <div class="map-marker marker-4" data-resource="3"><span>2</span></div>
+          <div class="map-marker marker-5" data-resource="4"><span>1</span></div>
+          <div class="polygon-resource polygon-1" data-resource="5"></div>
+          <div class="polygon-resource polygon-2" data-resource="6"></div>
+          <div class="map-legend">
+            <strong>图例</strong><span><i class="legend-dot"></i>点状资源</span><span><i class="legend-area"></i>面状资源</span><span><i class="legend-plan"></i>规划地块</span>
+          </div>
+          <div class="map-attribution">演示底图 · 百度地图接口预留 · BD-09 展示层</div>
+        </div>
+        <button class="sidebar-reopen left" id="leftReopen">›</button>
+        <button class="sidebar-reopen right" id="rightReopen">‹</button>
+      </section>
+
+      <aside class="sidebar sidebar-right" id="rightSidebar">
+        <div class="sidebar-heading">
+          <button class="icon-button" data-collapse="right" aria-label="收起右侧栏">›</button>
+          <div class="right-heading"><span class="status-badge verified" id="detailStatus">已核实</span><button class="more-button">•••</button></div>
+        </div>
+        <div class="resource-cover" id="resourceCover"><div class="cover-grid"></div><span>示例影像</span><b>建筑与场地照片区</b></div>
+        <div class="detail-content">
+          <div class="detail-title-row"><div><span id="detailCode">ZY-2026-0018</span><h2 id="detailName">八角北路闲置场地</h2></div><button class="star">☆</button></div>
+          <div class="address" id="detailAddress">石景山区八角街道八角北路东侧</div>
+          <div class="detail-tabs"><button class="active" data-tab="base">基本信息</button><button data-tab="version">版本记录</button><button data-tab="review">审核记录</button></div>
+          <div id="detailPanel"></div>
+          <div class="detail-actions"><button class="secondary" id="historyButton">查看历史版本</button><button class="primary" id="editButton">发起修改申请</button></div>
+        </div>
+      </aside>
+    </main>
+
+    <div class="floating-actions"><button id="reviewButton"><span>✓</span>审核中心<b>6</b></button><button id="addButton"><span>＋</span>新增资源</button></div>
+    <div class="demo-controller" id="demoController">
+      <div class="demo-progress"><span id="demoProgress"></span></div>
+      <div class="demo-copy"><small>自动演示</small><strong id="demoTitle">资源全景总览</strong><span id="demoStep">1 / 6</span></div>
+      <div class="demo-buttons"><button id="prevStep">‹</button><button id="toggleDemo">暂停</button><button id="nextStep">›</button></div>
+    </div>
+    <div class="toast" id="toast"></div>
+
+    <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+      <section class="modal" id="modal">
+        <button class="modal-close" id="modalClose">×</button>
+        <div id="modalContent"></div>
+      </section>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
+
